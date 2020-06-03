@@ -1,23 +1,13 @@
+
 from rest_framework import serializers
-from users import serializers as user_serializers
-from . import models
+from users.serializers import UserSerializer
+from .models import Room
 
 
-class RoomListSerializer(serializers.ModelSerializer):
-    user = user_serializers.TinyUserSerializer()
+class RoomSerializer(serializers.ModelSerializer):
+
+    user = UserSerializer()
 
     class Meta:
-        model = models.Room
-        fields = (
-            "uuid",
-            "name",
-            "price",
-            "instant_book",
-            "user",
-        )
-
-
-class RoomDetailSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Room
-        exclude = ()
+        model = Room
+        exclude = ("updated_at",)
