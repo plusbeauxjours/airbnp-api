@@ -10,7 +10,7 @@ from rest_framework.response import Response
 #     serialized_rooms = serializers.RoomListSerializer(rooms, many=True)
 #     return Response(serialized_rooms.data)
 
-from rest_framework.views import APIView
+# from rest_framework.views import APIView
 
 
 # class RoomListView(APIView):
