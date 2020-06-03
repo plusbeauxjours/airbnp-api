@@ -8,7 +8,13 @@ class RoomListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Room
-        fields = ("name", "price", "instant_book", "user")
+        fields = (
+            "uuid",
+            "name",
+            "price",
+            "instant_book",
+            "user",
+        )
 
 
 class RoomDetailSerializer(serializers.ModelSerializer):

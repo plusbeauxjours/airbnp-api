@@ -1,3 +1,4 @@
+import uuid
 import random
 from datetime import datetime
 from django.core.management.base import BaseCommand
@@ -21,6 +22,7 @@ class Command(BaseCommand):
             Room,
             150,
             {
+                "uuid": lambda x: uuid.uuid4(),
                 "user": lambda x: random.choice(users),
                 "name": lambda x: room_seeder.faker.street_address(),
                 "price": lambda x: random.randint(0, 300),

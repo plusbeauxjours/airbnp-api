@@ -33,3 +33,4 @@ from rest_framework.generics import RetrieveAPIView
 class RoomDetailView(RetrieveAPIView):
     queryset = models.Room.objects.all()
     serializer_class = serializers.RoomDetailSerializer
+    lookup_field = "uuid"

@@ -1,9 +1,11 @@
+import uuid
 from django.db import models
 from core.models import CoreModel
 
 
 class Room(CoreModel):
 
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     name = models.CharField(max_length=140)
     address = models.CharField(max_length=140)
     price = models.IntegerField(help_text="USD per night")

@@ -7,6 +7,7 @@ class RoomAdmin(admin.ModelAdmin):
 
     list_display = (
         "name",
+        "uuid",
         "photo_number",
     )
 
