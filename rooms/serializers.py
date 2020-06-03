@@ -3,9 +3,15 @@ from users import serializers as user_serializers
 from . import models
 
 
-class RoomSerializer(serializers.ModelSerializer):
+class RoomListSerializer(serializers.ModelSerializer):
     user = user_serializers.TinyUserSerializer()
 
     class Meta:
         model = models.Room
         fields = ("name", "price", "instant_book", "user")
+
+
+class RoomDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Room
+        exclude = ()

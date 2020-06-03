@@ -5,23 +5,31 @@ from rest_framework.response import Response
 
 
 # @api_view(["GET"])
-# def list_rooms(request):
+# def room_list(request):
 #     rooms = models.Room.objects.all()
-#     serialized_rooms = serializers.RoomSerializer(rooms, many=True)
+#     serialized_rooms = serializers.RoomListSerializer(rooms, many=True)
 #     return Response(serialized_rooms.data)
 
 from rest_framework.views import APIView
 
 
-# class ListRoomsView(APIView):
+# class RoomListView(APIView):
 #     def get(self, request):
 #         rooms = models.Room.objects.all()
-#         serializer = serializers.RoomSerializer(rooms, many=True)
+#         serializer = serializers.RoomListSerializer(rooms, many=True)
 #         return Response(serializer.data)
 
 from rest_framework.generics import ListAPIView
 
 
-class ListRoomsView(ListAPIView):
+class RoomListView(ListAPIView):
     queryset = models.Room.objects.all()
-    serializer_class = serializers.RoomSerializer
+    serializer_class = serializers.RoomListSerializer
+
+
+from rest_framework.generics import RetrieveAPIView
+
+
+class RoomDetailView(RetrieveAPIView):
+    queryset = models.Room.objects.all()
+    serializer_class = serializers.RoomDetailSerializer
