@@ -1,3 +1,12 @@
 {
-    "python.formatting.provider": "black"
+    "python.formatting.provider": "black",
+    "python.linting.pylintArgs": [
+        "--load-plugins",
+        "pylint_django"
+    ],
+    "python.pythonPath": "/Users/plusbeauxjours/.local/share/virtualenvs/airbnp-api-3rLaFI_o/bin/python",
+    "python.linting.pylintPath": "/Users/hwang/miniconda3/envs/april08v2/bin/pylint",
+    "python.linting.pylintEnabled": false,
+    "python.linting.enabled": true,
+    "python.linting.flake8Enabled": true
 }
