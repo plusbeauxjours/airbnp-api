@@ -29,6 +29,9 @@ class Room(CoreModel):
 
     photo_number.short_description = "Photo Count"
 
+    class Meta:
+        ordering = ["-created_at"]
+
 
 class Photo(CoreModel):
 
