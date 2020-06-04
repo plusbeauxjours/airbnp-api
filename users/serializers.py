@@ -1,10 +1,10 @@
 from rest_framework import serializers
-from . import models
+from .models import User
 
 
 class RelatedUserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.User
+        model = User
         fields = (
             "username",
             "first_name",
@@ -15,25 +15,22 @@ class RelatedUserSerializer(serializers.ModelSerializer):
         )
 
 
-class ReadUserSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.User
-        exclude = (
+        model = User
+        fields = "__all__"
+        read_only_fields = (
+            "id",
+            "uuid",
             "groups",
             "user_permissions",
             "password",
-            "last_login",
             "is_superuser",
             "is_staff",
             "is_active",
+            "last_login",
             "date_joined",
         )
-
-
-class WriteUserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.User
-        fields = ("username", "first_name", "last_name", "email")
 
     def validate_first_name(self, value):
         print(value)
