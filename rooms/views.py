@@ -35,7 +35,7 @@ class RoomView(APIView):
         room = self.get_room(uuid)
         if room is not None:
             serializer = RoomSerializer(room).data
-            return Response(data=serializer)
+            return Response(data=serializer, status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -50,7 +50,9 @@ class RoomView(APIView):
                 room_serializer = RoomSerializer(room).data
                 return Response(data=room_serializer, status=status.HTTP_200_OK)
             else:
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                return Response(
+                    data=serializer.errors, status=status.HTTP_400_BAD_REQUEST
+                )
             return Response()
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)

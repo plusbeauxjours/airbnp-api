@@ -23,16 +23,34 @@ class MeView(APIView):
             user_serializer = UserSerializer(user).data
             return Response(data=user_serializer, status=status.HTTP_200_OK)
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UsersView(APIView):
+    def post(self, request):
+        serializer = UserSerializer(data=request.data)
+        if serializer.is_valid():
+            new_user = serializer.save()
+            serializer = UserSerializer(new_user).data
+            return Response(data=serializer, status=status.HTTP_200_OK)
+        else:
+            return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserView(APIView):
-    def get(self, request, uuid):
+    def get_user(self, uuid):
         try:
             user = User.objects.get(uuid=uuid)
+            return user
+        except User.DoesNotExist:
+            return None
+
+    def get(self, request, uuid):
+        user = self.get_user(uuid)
+        if user is not None:
             serializer = UserSerializer(user).data
             return Response(data=serializer, status=status.HTTP_200_OK)
-        except User.DoesNotExist:
+        else:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
 
@@ -53,10 +71,9 @@ class FavsView(APIView):
                 room = Room.objects.get(uuid=uuid)
                 if room in user.favs.all():
                     user.favs.remove(room)
-                    serializer = RoomSerializer(user.favs.all(), many=True).data
                 else:
                     user.favs.add(room)
-                    serializer = RoomSerializer(user.favs.all(), many=True).data
+                serializer = RoomSerializer(user.favs.all(), many=True).data
                 return Response(data=serializer, status=status.HTTP_200_OK)
             except Room.DoesNotExist:
                 pass
