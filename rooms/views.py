@@ -8,7 +8,7 @@ class RoomsView(APIView):
     def get(self, request):
         rooms = models.Room.objects.all()[:5]
         serializer = serializers.ReadRoomSerializer(rooms, many=True).data
-        return Response(serializer)
+        return Response(data=serializer)
 
     def post(self, request):
         if not request.user.is_authenticated:
@@ -23,16 +23,28 @@ class RoomsView(APIView):
 
 
 class RoomView(APIView):
-    def get(self, request, uuid):
+    def get_room(self, uuid):
         try:
             room = models.Room.objects.get(uuid=uuid)
+            return room
+        except models.Room.DoesNotExist:
+            return None
+
+    def get(self, request, uuid):
+        print(uuid)
+        room = self.get_room(uuid)
+        if room is not None:
             serializer = serializers.ReadRoomSerializer(room).data
             return Response(data=serializer)
-        except models.Room.DoesNotExist:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
-    def put(self, request):
-        pass
-
-    def delete(self, request):
-        pass
+    def delete(self, request, uuid):
+        room = self.get_room(uuid)
+        if room is not None:
+            if room.user != request.user:
+                return Response(status=status.HTTP_403_FORBIDDEN)
+            room.delete()
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
