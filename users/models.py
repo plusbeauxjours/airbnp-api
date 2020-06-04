@@ -1,9 +1,10 @@
 import uuid
 from django.db import models
+from core.models import CoreModel
 from django.contrib.auth.models import AbstractUser
 
 
-class User(AbstractUser):
+class User(AbstractUser, CoreModel):
 
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     avatar = models.ImageField(upload_to="avatars", blank=True)
@@ -14,3 +15,6 @@ class User(AbstractUser):
         return self.rooms.count()
 
     room_count.short_description = "Room Count"
+
+    class Meta:
+        ordering = ["-created_at"]

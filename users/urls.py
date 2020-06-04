@@ -5,6 +5,7 @@ app_name = "users"
 
 urlpatterns = [
     path("", views.UsersView.as_view()),
+    path("token/", views.Login.as_view()),
     path("me/", views.MeView.as_view()),
     path("me/favs/", views.FavsView.as_view()),
     path("<uuid:uuid>", views.UserView.as_view()),

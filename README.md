@@ -4,7 +4,8 @@ REST & GraphQL API of the Airbnb Clone using Django REST Framework and Graphene 
 
 ### API Actions
 
-- [ ] Login (JWTT)
+- [ ] JWT Authentication
+- [x] Login (JWTT)
 - [x] Create Account
 - [x] See Profile
 - [x] Edit Profile
