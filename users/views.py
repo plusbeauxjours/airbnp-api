@@ -1,4 +1,5 @@
 from .models import User
+from rooms.models import Room
 from rooms.serializers import RoomSerializer
 from .serializers import UserSerializer
 from rest_framework.permissions import IsAuthenticated
@@ -45,4 +46,18 @@ class FavsView(APIView):
         return Response(data=serializer, status=status.HTTP_200_OK)
 
     def put(self, request):
-        pass
+        uuid = request.data.get("uuid", None)
+        user = request.user
+        if uuid is not None:
+            try:
+                room = Room.objects.get(uuid=uuid)
+                if room in user.favs.all():
+                    user.favs.remove(room)
+                    serializer = RoomSerializer(user.favs.all(), many=True).data
+                else:
+                    user.favs.add(room)
+                    serializer = RoomSerializer(user.favs.all(), many=True).data
+                return Response(data=serializer, status=status.HTTP_200_OK)
+            except Room.DoesNotExist:
+                pass
+        return Response(status=status.HTTP_400_BAD_REQUEST)
