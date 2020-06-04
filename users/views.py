@@ -1,4 +1,5 @@
 from .models import User
+from rooms.serializers import RoomSerializer
 from .serializers import UserSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
@@ -32,3 +33,16 @@ class UserView(APIView):
             return Response(data=serializer, status=status.HTTP_200_OK)
         except User.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+class FavsView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        serializer = RoomSerializer(user.favs.all(), many=True).data
+        return Response(data=serializer, status=status.HTTP_200_OK)
+
+    def put(self, request):
+        pass
