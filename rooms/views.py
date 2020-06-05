@@ -41,7 +41,9 @@ class RoomSearchView(APIView):
         except ValueError:
             rooms = Room.objects.all()
         results = paginator.paginate_queryset(rooms, request)
-        serializer = RoomSerializer(results, many=True, context={"request": request})
+        serializer = RoomSerializer(
+            results, many=True, context={"request": request.user}
+        )
         return paginator.get_paginated_response(serializer.data)
 
 
