@@ -3,13 +3,29 @@ from .serializers import RoomSerializer
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.pagination import PageNumberPagination
+
+
+class OwnPagination(PageNumberPagination):
+    page_size = 5
+
+
+class RoomSearchView(APIView):
+    def get(self, request):
+        paginator = OwnPagination()
+        rooms = Room.objects.filter()
+        results = paginator.paginate_queryset(rooms, request)
+        serializer = RoomSerializer(results, many=True)
+        return paginator.get_paginated_response(serializer.data)
 
 
 class RoomsView(APIView):
     def get(self, request):
-        rooms = Room.objects.all()[:5]
-        serializer = RoomSerializer(rooms, many=True).data
-        return Response(data=serializer)
+        paginator = OwnPagination()
+        rooms = Room.objects.all()
+        results = paginator.paginate_queryset(rooms, request)
+        serializer = RoomSerializer(results, many=True).data
+        return paginator.get_paginated_response(serializer.data)
 
     def post(self, request):
         if not request.user.is_authenticated:
