@@ -1,10 +1,13 @@
 import jwt
-from django.conf import settings
-from django.contrib.auth import authenticate
+
 from .models import User
+from .serializers import UserSerializer
 from rooms.models import Room
 from rooms.serializers import RoomSerializer
-from .serializers import UserSerializer
+
+from django.conf import settings
+from django.contrib.auth import authenticate
+
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from rest_framework.views import APIView
@@ -85,14 +88,12 @@ class FavsView(APIView):
 
 class Login(APIView):
     def post(self, request):
-        print("user")
         username = request.data.get("username")
         password = request.data.get("password")
         if not username or not password:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         user = authenticate(username=username, password=password)
         if user is not None:
-            print(user.uuid)
             encoded_jwt = jwt.encode(
                 {"uuid": str(user.uuid)}, settings.SECRET_KEY, algorithm="HS256"
             )
