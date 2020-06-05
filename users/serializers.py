@@ -20,7 +20,6 @@ class UserSerializer(serializers.ModelSerializer):
         )
         read_only_fields = (
             "uuid",
-            "username",
             "avatar",
             "superhost",
         )
