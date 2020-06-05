@@ -14,7 +14,6 @@ class RoomViewSet(ModelViewSet):
     lookup_url_kwarg = "uuid"
 
     def get_permissions(self):
-        permission_classes = []
         if self.action == "list" or self.action == "retrieve":
             permission_classes = [permissions.AllowAny]
         elif self.action == "create":
