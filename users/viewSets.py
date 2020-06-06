@@ -1,6 +1,8 @@
 import jwt
 
 from .models import User
+from rooms.models import Room
+from rooms.serializers import RoomSerializer
 from .serializers import UserSerializer
 from .permissions import IsSelf
 
@@ -23,10 +25,14 @@ class UserViewSet(ModelViewSet):
     def get_permissions(self):
         if self.action == "list":
             permission_classes = [permissions.IsAdminUser]
-        elif self.action == "create" or self.action == "retrieve":
+        elif (
+            self.action == "create"
+            or self.action == "retrieve"
+            or self.action == "favs"
+        ):
             permission_classes = [permissions.AllowAny]
         else:
-            permission_classes = [IsSelf | permissions.IsAdminUser]
+            permission_classes = [IsSelf]
 
         return [permission() for permission in permission_classes]
 
@@ -37,7 +43,7 @@ class UserViewSet(ModelViewSet):
         serializer = UserSerializer(request.user).data
         return Response(data=serializer, status=status.HTTP_200_OK)
 
-    @action(detail=False, metod=["post"])
+    @action(detail=False, methods=["post"])
     def login(self, request):
         username = request.data.get("username")
         password = request.data.get("password")
@@ -46,8 +52,31 @@ class UserViewSet(ModelViewSet):
         user = authenticate(username=username, password=password)
         if user is not None:
             encoded_jwt = jwt.encode(
-                {"pk": user.pk}, settings.SECRET_KEY, algorithm="HS256"
+                {"uuid": str(user.uuid)}, settings.SECRET_KEY, algorithm="HS256"
             )
-            return Response(data={"token": encoded_jwt, "id": user.pk})
+            return Response(data={"token": encoded_jwt, "uuid": str(user.uuid)})
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+    @action(detail=True)
+    def favs(self, request, uuid):
+        user = self.get_object()
+        serializer = RoomSerializer(user.favs.all(), many=True).data
+        return Response(data=serializer, status=status.HTTP_200_OK)
+
+    @favs.mapping.put
+    def toggle_favs(self, request, uuid):
+        uuid = request.data.get("uuid", None)
+        user = self.get_object()
+        if uuid is not None:
+            try:
+                room = Room.objects.get(uuid=uuid)
+                if room in user.favs.all():
+                    user.favs.remove(room)
+                else:
+                    user.favs.add(room)
+                serializer = RoomSerializer(user.favs.all(), many=True).data
+                return Response(data=serializer, status=status.HTTP_200_OK)
+            except Room.DoesNotExist:
+                pass
+        return Response(status=status.HTTP_400_BAD_REQUEST)
