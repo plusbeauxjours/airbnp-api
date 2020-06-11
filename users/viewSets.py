@@ -36,13 +36,6 @@ class UserViewSet(ModelViewSet):
 
         return [permission() for permission in permission_classes]
 
-    @action(detail=False)
-    def me(self, request):
-        if not request.user.is_authenticated:
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
-        serializer = UserSerializer(request.user).data
-        return Response(data=serializer, status=status.HTTP_200_OK)
-
     @action(detail=False, methods=["post"])
     def login(self, request):
         username = request.data.get("username")
