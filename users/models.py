@@ -9,7 +9,9 @@ class User(AbstractUser, CoreModel):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     avatar = models.ImageField(upload_to="avatars", blank=True)
     superhost = models.BooleanField(default=False)
-    favs = models.ManyToManyField("rooms.Room", related_name="favs")
+    favs = models.ManyToManyField(
+        "rooms.Room", related_name="favs", blank=True, null=True
+    )
 
     def room_count(self):
         return self.rooms.count()
