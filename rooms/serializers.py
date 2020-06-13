@@ -32,8 +32,9 @@ class RoomSerializer(serializers.ModelSerializer):
         return data
 
     def get_is_fav(self, obj):
-        user = self.context.get("user")
-        if user:
+        request = self.context.get("request")
+        if request:
+            user = request.user
             if user.is_authenticated:
                 return obj in user.favs.all()
         return False

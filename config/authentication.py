@@ -12,8 +12,8 @@ class JWTAuthentication(authentication.BaseAuthentication):
                 return None
             xjwt, jwt_token = token.split(" ")
             decoded = jwt.decode(jwt_token, settings.SECRET_KEY, algorithms=["HS256"])
-            pk = decoded.get("pk")
-            user = User.objects.get(pk=pk)
+            uuid = decoded.get("uuid")
+            user = User.objects.get(uuid=uuid)
             return (user, None)
         except (ValueError, jwt.exceptions.DecodeError, User.DoesNotExist):
             return None
