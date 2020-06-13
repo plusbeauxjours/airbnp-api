@@ -29,6 +29,8 @@ class Command(BaseCommand):
                 "uuid": lambda x: uuid.uuid4(),
                 "user": lambda x: random.choice(users),
                 "name": lambda x: room_seeder.faker.street_address(),
+                "lat": lambda x: random.uniform(-90, 90),
+                "lng": lambda x: random.uniform(-180, 180),
                 "price": lambda x: random.randint(0, 300),
                 "beds": lambda x: random.randint(0, 5),
                 "bedrooms": lambda x: random.randint(0, 3),
