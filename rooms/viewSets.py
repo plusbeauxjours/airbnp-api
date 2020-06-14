@@ -24,6 +24,7 @@ class RoomViewSet(ModelViewSet):
 
     @action(detail=False)
     def search(self, request):
+        search = request.GET.get("search", None)
         max_price = request.GET.get("max_price", None)
         min_price = request.GET.get("min_price", None)
         beds = request.GET.get("beds", None)
@@ -32,6 +33,8 @@ class RoomViewSet(ModelViewSet):
         lat = request.GET.get("lat", None)
         lng = request.GET.get("lng", None)
         filter_kwargs = {}
+        if search is not None:
+            filter_kwargs["address__contains"] = search
         if max_price is not None:
             filter_kwargs["price__lte"] = max_price
         if min_price is not None:
@@ -53,5 +56,5 @@ class RoomViewSet(ModelViewSet):
         except ValueError:
             rooms = Room.objects.all()
         results = paginator.paginate_queryset(rooms, request)
-        serializer = RoomSerializer(results, many=True)
+        serializer = RoomSerializer(results, many=True, context={"request": request})
         return paginator.get_paginated_response(serializer.data)
