@@ -43,3 +43,17 @@ class Photo(CoreModel):
 
     def __str__(self):
         return self.room.name
+
+
+class Review(CoreModel):
+
+    user = models.ForeignKey(
+        "users.User", on_delete=models.CASCADE, related_name="reviews"
+    )
+    room = models.ForeignKey(
+        "rooms.Room", on_delete=models.CASCADE, related_name="reviews"
+    )
+    text = models.CharField(max_length=5000)
+
+    def __str__(self):
+        return self.room.name + self.user.username
