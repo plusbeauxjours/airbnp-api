@@ -12,6 +12,8 @@ class Command(BaseCommand):
     help = "It seeds the DB with tons of stuff"
 
     def handle(self, *args, **options):
+        rooms = Room.objects.all()
+        rooms.delete()
         user_seeder = Seed.seeder()
         user_seeder.add_entity(
             User,
@@ -24,16 +26,16 @@ class Command(BaseCommand):
         room_seeder = Seed.seeder()
         room_seeder.add_entity(
             Room,
-            150,
+            600,
             {
                 "uuid": lambda x: uuid.uuid4(),
                 "user": lambda x: random.choice(users),
                 "name": lambda x: room_seeder.faker.street_address(),
-                "lat": lambda x: random.uniform(-90, 90),
-                "lng": lambda x: random.uniform(-180, 180),
-                "price": lambda x: random.randint(0, 300),
-                "beds": lambda x: random.randint(0, 5),
-                "bedrooms": lambda x: random.randint(0, 3),
+                "lat": lambda x: random.uniform(40.706943, 40.822943),
+                "lng": lambda x: random.uniform(-73.923917, -74.040000),
+                "price": lambda x: random.randint(60, 300),
+                "beds": lambda x: random.randint(0, 8),
+                "bedrooms": lambda x: random.randint(0, 5),
                 "bathrooms": lambda x: random.randint(0, 5),
                 "instant_book": lambda x: random.choice([True, False]),
                 "check_in": lambda x: datetime.now(),
@@ -48,6 +50,6 @@ class Command(BaseCommand):
                 Photo.objects.create(
                     caption=room_seeder.faker.sentence(),
                     room=room,
-                    file=f"room_photos/{random.randint(1, 31)}.webp",
+                    file=f"room_photos/{random.randint(1, 31)}.jpeg",
                 )
         self.stdout.write(self.style.SUCCESS(f"Everything seeded"))
