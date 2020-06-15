@@ -4,7 +4,7 @@ from datetime import datetime
 from django.core.management.base import BaseCommand
 from django_seed import Seed
 from users.models import User
-from rooms.models import Room, Photo
+from rooms.models import Room, Photo, Review
 
 
 class Command(BaseCommand):
@@ -52,4 +52,20 @@ class Command(BaseCommand):
                     room=room,
                     file=f"room_photos/{random.randint(1, 31)}.jpeg",
                 )
+
+        users = User.objects.all()
+        rooms = Room.objects.all()
+        review_seeder = Seed.seeder()
+        review_seeder.add_entity(
+            Review,
+            600,
+            {
+                "uuid": lambda x: uuid.uuid4(),
+                "user": lambda x: random.choice(users),
+                "text": lambda x: review_seeder.faker.text(),
+                "room": lambda x: random.choice(rooms),
+            },
+        )
+        room_seeder.execute()
+
         self.stdout.write(self.style.SUCCESS(f"Everything seeded"))

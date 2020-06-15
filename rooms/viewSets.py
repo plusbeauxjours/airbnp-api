@@ -1,9 +1,10 @@
-from .models import Room
+from .models import Room, Review
 from .permissions import IsOwner
-from .serializers import RoomSerializer
+from .serializers import RoomSerializer, ReviewSerializer
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
-from rest_framework import permissions
+from rest_framework.response import Response
+from rest_framework import permissions, status
 
 
 class RoomViewSet(ModelViewSet):
@@ -14,7 +15,11 @@ class RoomViewSet(ModelViewSet):
     lookup_url_kwarg = "uuid"
 
     def get_permissions(self):
-        if self.action == "list" or self.action == "retrieve":
+        if (
+            self.action == "list"
+            or self.action == "retrieve"
+            or self.action == "reviews"
+        ):
             permission_classes = [permissions.AllowAny]
         elif self.action == "create":
             permission_classes = [permissions.IsAuthenticated]
@@ -65,3 +70,16 @@ class RoomViewSet(ModelViewSet):
         results = paginator.paginate_queryset(rooms, request)
         serializer = RoomSerializer(results, many=True, context={"request": request})
         return paginator.get_paginated_response(serializer.data)
+
+    @action(detail=True)
+    def reviews(self, request, uuid):
+        room = self.get_object()
+        if room:
+            try:
+                serializer = ReviewSerializer(room.reviews.all(), many=True).data
+                print(serializer)
+                return Response(data=serializer, status=status.HTTP_200_OK)
+            except Review.DoesNotExist:
+                pass
+
+        return Response(status=status.HTTP_400_BAD_REQUEST)

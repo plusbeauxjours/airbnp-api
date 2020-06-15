@@ -47,6 +47,7 @@ class Photo(CoreModel):
 
 class Review(CoreModel):
 
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     user = models.ForeignKey(
         "users.User", on_delete=models.CASCADE, related_name="reviews"
     )
@@ -56,4 +57,4 @@ class Review(CoreModel):
     text = models.CharField(max_length=5000)
 
     def __str__(self):
-        return self.room.name + self.user.username
+        return self.room.name

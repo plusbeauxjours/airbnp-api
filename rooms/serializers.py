@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from users.serializers import UserSerializer
-from .models import Room, Photo
+from .models import Room, Photo, Review
 
 
 class PhotoSerializer(serializers.ModelSerializer):
@@ -43,3 +43,18 @@ class RoomSerializer(serializers.ModelSerializer):
         request = self.context.get("request")
         room = Room.objects.create(**validated_data, user=request.user)
         return room
+
+
+class ReviewSerializer(serializers.ModelSerializer):
+
+    user = UserSerializer(read_only=True)
+
+    class Meta:
+        model = Review
+        exclude = ("updated_at",)
+        read_only_fields = ("user", "text", "id", "uuid", "created_at", "updated_at")
+
+    def create(self, validated_data):
+        request = self.context.get("request")
+        review = Review.objects.create(**validated_data, user=request.user)
+        return review
