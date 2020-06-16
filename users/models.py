@@ -1,5 +1,6 @@
 import uuid
 from django.db import models
+from rooms.models import Review
 from core.models import CoreModel
 from django.contrib.auth.models import AbstractUser
 
@@ -13,6 +14,11 @@ class User(AbstractUser, CoreModel):
 
     def room_count(self):
         return self.rooms.count()
+
+    def review_count(self):
+        rooms = self.rooms.all()
+        reviews = Review.objects.filter(room__in=rooms)
+        return reviews.count()
 
     room_count.short_description = "Room Count"
 

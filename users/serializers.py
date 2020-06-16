@@ -17,11 +17,15 @@ class UserSerializer(serializers.ModelSerializer):
             "avatar",
             "superhost",
             "password",
+            "room_count",
+            "review_count",
         )
         read_only_fields = (
             "uuid",
             "avatar",
             "superhost",
+            "room_count",
+            "review_count",
         )
 
     def validate_first_name(self, value):
