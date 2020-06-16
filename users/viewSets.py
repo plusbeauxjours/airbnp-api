@@ -30,6 +30,8 @@ class UserViewSet(ModelViewSet):
             or self.action == "retrieve"
             or self.action == "favs"
             or self.action == "toggle_favs"
+            or self.action == "reviews"
+            or self.action == "rooms"
         ):
             permission_classes = [permissions.AllowAny]
         else:
