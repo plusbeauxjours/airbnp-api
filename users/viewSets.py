@@ -90,3 +90,11 @@ class UserViewSet(ModelViewSet):
                 pass
 
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=True)
+    def rooms(self, request, uuid):
+        user = self.get_object()
+        serializer = RoomSerializer(
+            user.rooms.all(), many=True, context={"request": request}
+        ).data
+        return Response(data=serializer, status=status.HTTP_200_OK)
