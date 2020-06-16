@@ -10,7 +10,8 @@ class RoomAdmin(admin.ModelAdmin):
         "lat",
         "lng",
         "uuid",
-        "photo_number",
+        "photo_count",
+        "review_count",
     )
 
 

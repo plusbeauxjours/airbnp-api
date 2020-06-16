@@ -24,10 +24,14 @@ class Room(CoreModel):
     def __str__(self):
         return self.name
 
-    def photo_number(self):
+    def photo_count(self):
         return self.photos.count()
 
-    photo_number.short_description = "Photo Count"
+    def review_count(self):
+        return self.reviews.count()
+
+    photo_count.short_description = "Photo Count"
+    review_count.short_description = "Review Count"
 
     class Meta:
         ordering = ["-created_at"]
