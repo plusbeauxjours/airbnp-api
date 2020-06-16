@@ -1,8 +1,8 @@
 import jwt
 
 from .models import User
-from rooms.models import Room
-from rooms.serializers import RoomSerializer
+from rooms.models import Room, Review
+from rooms.serializers import RoomSerializer, ReviewSerializer
 from .serializers import UserSerializer
 from .permissions import IsSelf
 
@@ -75,4 +75,18 @@ class UserViewSet(ModelViewSet):
                 return Response(data=serializer, status=status.HTTP_200_OK)
             except Room.DoesNotExist:
                 pass
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=True)
+    def reviews(self, request, uuid):
+        user = self.get_object()
+        if user:
+            try:
+                rooms = user.rooms.all()
+                reviews = Review.objects.filter(room__in=rooms)
+                serializer = ReviewSerializer(reviews, many=True).data
+                return Response(data=serializer, status=status.HTTP_200_OK)
+            except Review.DoesNotExist:
+                pass
+
         return Response(status=status.HTTP_400_BAD_REQUEST)
