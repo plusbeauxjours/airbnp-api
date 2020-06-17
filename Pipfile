@@ -14,6 +14,11 @@ django-seed = "*"
 faker = "~=2.0.5"
 djangorestframework = "*"
 pyjwt = "*"
+gunicorn = "*"
+dj-database-url = "*"
+whitenoise = "*"
+psycopg2 = "*"
+django-environ = "*"
 
 [requires]
 python_version = "3.7"
