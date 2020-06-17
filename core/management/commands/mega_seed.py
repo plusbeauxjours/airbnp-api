@@ -59,7 +59,6 @@ class Command(BaseCommand):
                 )
 
         users = User.objects.all()
-        rooms = Room.objects.all()
         review_seeder = Seed.seeder()
         review_seeder.add_entity(
             Review,
@@ -71,6 +70,6 @@ class Command(BaseCommand):
                 "room": lambda x: random.choice(rooms),
             },
         )
-        room_seeder.execute()
+        review_seeder.execute()
 
         self.stdout.write(self.style.SUCCESS(f"Everything seeded"))

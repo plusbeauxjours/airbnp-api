@@ -76,8 +76,9 @@ class RoomViewSet(ModelViewSet):
         room = self.get_object()
         if room:
             try:
-                serializer = ReviewSerializer(room.reviews.all(), many=True).data
-                print(serializer)
+                serializer = ReviewSerializer(
+                    room.reviews.all().order_by("-created_at"), many=True
+                ).data
                 return Response(data=serializer, status=status.HTTP_200_OK)
             except Review.DoesNotExist:
                 pass

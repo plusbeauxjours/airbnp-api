@@ -40,3 +40,24 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
         return user
+
+
+class AppleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            "uuid",
+            "username",
+            "first_name",
+            "last_name",
+            "email",
+            "avatar",
+            "superhost",
+            "room_count",
+            "review_count",
+            "apple_id",
+        )
+
+    def create(self, validated_data):
+        user = super().create(validated_data)
+        return user

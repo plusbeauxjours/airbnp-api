@@ -3,7 +3,7 @@ import jwt
 from .models import User
 from rooms.models import Room, Review
 from rooms.serializers import RoomSerializer, ReviewSerializer
-from .serializers import UserSerializer
+from .serializers import UserSerializer, AppleSerializer
 from .permissions import IsSelf
 
 from django.conf import settings
@@ -32,6 +32,7 @@ class UserViewSet(ModelViewSet):
             or self.action == "toggle_favs"
             or self.action == "reviews"
             or self.action == "rooms"
+            or self.action == "appleLogin"
         ):
             permission_classes = [permissions.AllowAny]
         else:
@@ -100,3 +101,31 @@ class UserViewSet(ModelViewSet):
             user.rooms.all(), many=True, context={"request": request}
         ).data
         return Response(data=serializer, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=["post"])
+    def appleLogin(self, request):
+        apple_id = request.data.get("apple_id", None)
+        try:
+            user = User.objects.get(apple_id=apple_id)
+            encoded_jwt = jwt.encode(
+                {"uuid": str(user.uuid)}, settings.SECRET_KEY, algorithm="HS256"
+            )
+            return Response(
+                data={"token": encoded_jwt, "uuid": str(user.uuid)},
+                status=status.HTTP_200_OK,
+            )
+        except User.DoesNotExist:
+            serializer = AppleSerializer(data=request.data)
+            if serializer.is_valid():
+                new_user = serializer.save()
+                encoded_jwt = jwt.encode(
+                    {"uuid": str(new_user.uuid)}, settings.SECRET_KEY, algorithm="HS256"
+                )
+                return Response(
+                    data={"token": encoded_jwt, "uuid": str(new_user.uuid)},
+                    status=status.HTTP_200_OK,
+                )
+            else:
+                return Response(
+                    data=serializer.errors, status=status.HTTP_400_BAD_REQUEST
+                )
