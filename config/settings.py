@@ -27,6 +27,7 @@ ROOT_DIR = environ.Path(__file__) - 2
 SECRET_KEY = "cc)*5=(s+i2-&9x7&&&o+y7$g5!db3tvu85ykok#mwxf#6gir2"
 
 # SECURITY WARNING: don't run with debug turned on in production!
+# DEBUG = bool(os.environ.get("DJANGO_DEBUG"))
 DEBUG = False
 
 # Database
@@ -68,6 +69,7 @@ PROJECT_APPS = [
 
 THIRD_PARTY_APPS = [
     "rest_framework",
+    "storages",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
@@ -134,20 +136,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_ROOT = os.path.join(ROOT_DIR, "static")
-STATIC_URL = "/static/"
-# STATICFILES_DIRS = (
-#     os.path.join(ROOT_DIR, 'staticfiles'),
-# )
-
 
 AUTHENTICATION_BACKENDS = [
-    "graphql_jwt.backends.JSONWebTokenBackend",
     "django.contrib.auth.backends.ModelBackend",
 ]
-
-MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # Auth
 
@@ -164,7 +156,37 @@ REST_FRAMEWORK = {
     ],
 }
 
-if not DEBUG:
-    REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"] = [
-        "rest_framework.renderers.JSONRenderer",
-    ]
+# if DEBUG:
+
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
+MEDIA_URL = "/uploads/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "uploads")
+# STATICFILES_DIRS = (os.path.join(ROOT_DIR, "staticfiles"),)
+
+# else:
+
+# REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"] = [
+#     "rest_framework.renderers.JSONRenderer",
+# ]
+
+# AWS_REGION = "ap-southeast-1"
+# AWS_STORAGE_BUCKET_NAME = "airbnp-app"
+# AWS_QUERYSTRING_AUTH = False
+# AWS_S3_HOST = "s3.%s.amazonaws.com" % AWS_REGION
+# AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
+# AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
+# AWS_S3_CUSTOM_DOMAIN = "%s.s3.amazonaws.com" % AWS_STORAGE_BUCKET_NAME
+# AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
+# AWS_AUTO_CREATE_BUCKET = True
+# AWS_DEFAULT_ACL = None
+
+# # Static Setting
+# STATIC_URL = "https://%s/static/" % AWS_S3_CUSTOM_DOMAIN
+# STATICFILES_STORAGE = "config.custom_storages.StaticStorage"
+
+# # Media Setting
+# MEDIA_URL = "https://%s/uploads/" % AWS_S3_CUSTOM_DOMAIN
+# DEFAULT_FILE_STORAGE = "config.custom_storages.UploadStorage"
+

@@ -31,7 +31,7 @@ class Command(BaseCommand):
         room_seeder = Seed.seeder()
         room_seeder.add_entity(
             Room,
-            600,
+            50,
             {
                 "uuid": lambda x: uuid.uuid4(),
                 "user": lambda x: random.choice(users),
@@ -49,20 +49,12 @@ class Command(BaseCommand):
         )
         room_seeder.execute()
 
-        rooms = Room.objects.all()
-        for room in rooms:
-            for i in range(random.randint(5, 10)):
-                Photo.objects.create(
-                    caption=room_seeder.faker.sentence(),
-                    room=room,
-                    file=f"room_photos/{random.randint(1, 31)}.jpeg",
-                )
-
-        users = User.objects.all()
         review_seeder = Seed.seeder()
+        users = User.objects.all()
+        rooms = Room.objects.all()
         review_seeder.add_entity(
             Review,
-            600,
+            1000,
             {
                 "uuid": lambda x: uuid.uuid4(),
                 "user": lambda x: random.choice(users),
@@ -72,4 +64,12 @@ class Command(BaseCommand):
         )
         review_seeder.execute()
 
+        rooms = Room.objects.all()
+        for room in rooms:
+            for i in range(random.randint(3, 6)):
+                Photo.objects.create(
+                    caption=room_seeder.faker.sentence(),
+                    room=room,
+                    file=f"room_photos/{random.randint(1, 50)}.jpeg",
+                )
         self.stdout.write(self.style.SUCCESS(f"Everything seeded"))

@@ -17,8 +17,10 @@ pyjwt = "*"
 gunicorn = "*"
 dj-database-url = "*"
 whitenoise = "*"
-psycopg2 = "*"
+django-storages = "*"
+boto3 = "*"
 django-environ = "*"
+psycopg2 = "*"
 
 [requires]
 python_version = "3.7"
