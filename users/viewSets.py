@@ -105,6 +105,7 @@ class UserViewSet(ModelViewSet):
     @action(detail=False, methods=["post"])
     def appleLogin(self, request):
         apple_id = request.data.get("apple_id", None)
+        print(apple_id)
         try:
             user = User.objects.get(apple_id=apple_id)
             encoded_jwt = jwt.encode(
