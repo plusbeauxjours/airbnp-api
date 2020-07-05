@@ -1,20 +1,14 @@
-# Airbnp API
+# AIRBNP-SERVER
 
-REST & GraphQL API of the Airbnb Clone using Django REST Framework and Graphene GraphQL
+### Introduction
 
-### API Actions
+> Server for <a href="https://github.com/plusbeauxjours/airbnp-app">AIRBNP-APP</a>
 
-- [x] JWT Authentication
-- [x] Login (JWTT)
-- [x] Create Account
-- [x] See Profile
-- [x] Edit Profile
-- [x] Add/Room From Favourites
-- [x] List Rooms
-- [x] See Room
-- [x] Create Room
-- [x] Edit Room
-- [x] Delete Room
-- [x] Search Rooms
+### Technical Sheet
 
-# airbnp-api
+> Django, RESTful-API, Sentry, GoogleMapAPI, Heroku
+
+### Portfolio Link
+
+> https://www.plusbeauxjours.com/projects/app/airbnp-app
+
