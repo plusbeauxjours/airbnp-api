@@ -1,8 +1,8 @@
-# AIRBNP-SERVER
+# STAYFINDER-SERVER
 
 ### Introduction
 
-> Server for <a href="https://github.com/plusbeauxjours/airbnp-app">AIRBNP-APP</a>
+> Server for <a href="https://github.com/plusbeauxjours/airbnp-app">v-APP</a>
 
 ### Technical Sheet
 
@@ -10,5 +10,5 @@
 
 ### Portfolio Link
 
-> https://www.plusbeauxjours.info/projects/app/airbnp
+> https://www.plusbeauxjours.info/projects/app/stayfinder
 
