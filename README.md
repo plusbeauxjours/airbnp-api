@@ -2,7 +2,7 @@
 
 ### Introduction
 
-> Server for <a href="https://github.com/plusbeauxjours/airbnp-app">v-APP</a>
+> Server for <a href="https://github.com/plusbeauxjours/airbnp-app">STAYFINDER-APP</a>
 
 ### Technical Sheet
 
